@@ -1,5 +1,5 @@
 ---
-title:
+title: Gender Recognition by Voice
 sidebar: projects_sidebar
 toc: false
 permalink: gender00.html
@@ -18,7 +18,7 @@ folder: projects
 <div style="width: 820px; overflow: hidden">
 <iframe src="pages/projects/iframe/gender00.html" width="1150"
         frameborder="0" scrolling="no" onload="resize(this)"
-        style="position: relative; left: -202px; top: -75px"/>
+        style="position: relative; left: -202px; top: -70px"/>
 </div>
 
 </html>

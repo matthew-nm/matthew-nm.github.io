@@ -2,8 +2,8 @@
 
 entries:
 - title: sidebar
-  product: Projects Portfolio
-  version: 0.1
+  product: Projects
+  version:
   folders:
 
   - title:
@@ -19,16 +19,16 @@ entries:
       output: pdf
       type: frontmatter
 
-  - title: Welcome
-    output: web, pdf
-    folderitems:
+#  - title: Welcome
+#    output: web, pdf
+#    folderitems:
+#
+#    - title: Purpose
+#      url: /index.html
+#      output: web, pdf
+#      type: homepage
 
-    - title: Purpose
-      url: /index.html
-      output: web, pdf
-      type: homepage
-
-  - title: Machine Learning – Gender Recognition by Voice
+  - title: Gender Recognition by Voice
     output: web, pdf
     folderitems:
 

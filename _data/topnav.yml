@@ -3,8 +3,10 @@
 topnav:
 - title: Topnav
   items:
-    - title: News
-      url: /news
+    - title: LinkedIn
+      external_url: https://www.linkedin.com/in/matthewmalekhedayat
+    - title: Resume
+      url: /pages/docs/Matthew Malekhedayat Resume.pdf
 
 #Topnav dropdowns
 topnav_dropdowns:
