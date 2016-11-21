@@ -46,7 +46,21 @@ layout: default
     {% endif %}
 -->
 
-  {{content}}
+  <html>
+
+  <head>
+  <script>
+    function resize(obj) {
+      obj.style.height = obj.contentWindow.document.body.scrollHeight + 60 + 'px';
+    }
+  </script>
+  </head>
+
+  <div class="divproject iframeproject">
+    {{content}}
+  </div>
+
+  </html>
 
     <div class="tags">
         {% if page.tags != null %}

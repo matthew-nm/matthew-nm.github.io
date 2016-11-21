@@ -2,7 +2,7 @@
 title: Gender Recognition by Voice
 sidebar: projects_sidebar
 toc: false
-permalink: gender01.html
+permalink: gender02.html
 layout: projects
 folder: projects
 ---

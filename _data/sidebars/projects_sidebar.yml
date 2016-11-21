@@ -32,12 +32,7 @@ entries:
     output: web, pdf
     folderitems:
 
-    - title: 00 | Introduction
-      url: /gender00.html
-      output: web, pdf
-      type: homepage
-
-    - title: 01 | Data Exploration
+    - title: 01 | Introduction & Data Exploration
       url: /gender01.html
       output: web, pdf
 
@@ -50,11 +45,11 @@ entries:
       output: web, pdf
 
     - title: 04 | Random Forest
-      url: /gender_04-random-forest.html
+      url: /gender04.html
       output: web, pdf
 
     - title: 05 | Neural Network (Tensorflow)
-      url: /gender_05-neural-network
+      url: /gender05.html
       output: web, pdf
 
   - title: Project 2
