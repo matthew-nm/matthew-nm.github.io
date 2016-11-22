@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="keywords" content=" ">
-<title> | Matthew's Portfolio</title>
+<title>Gender Recognition by Voice | Matthew's Portfolio</title>
 <link rel="stylesheet" href="css/syntax.css">
 
 
@@ -129,7 +129,7 @@
                 
                 
                 
-			<li><a class="email" title="Say hi!" href="#" onclick="javascript:window.location='mailto:matthewmalek@gmail.com?subject=Online Portfolio&body=Hello, Matthew! I saw your  page and wanted to get in contact: ' + window.location.href;"><i class="fa fa-envelope-o"></i> Contact Me</a><li>
+			<li><a class="email" title="Say hi!" href="#" onclick="javascript:window.location='mailto:matthewmalek@gmail.com?subject=Online Portfolio&body=Hello, Matthew! I saw your Gender Recognition by Voice page and wanted to get in contact: ' + window.location.href;"><i class="fa fa-envelope-o"></i> Contact Me</a><li>
 
 		
                 <!--comment out this block if you want to hide search-->
@@ -145,7 +145,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: 'search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="Gender Recognition by Voice">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -181,38 +181,47 @@
 
 
 <ul id="mysidebar" class="nav">
-    <li class="sidebarTitle"> </li>
+    <li class="sidebarTitle">Projects </li>
     
     
+    
+        
     
     <li>
-        <a href="#">Products</a>
+        <a href="#">Gender Recognition by Voice</a>
         <ul>
             
             
             
-            <li><a href="news.html">News</a></li>
+            <li><a href="gender01.html">01 | Data Exploration</a></li>
             
             
             
             
             
             
-            <li><a href="mydoc_introduction.html">Theme instructions</a></li>
+            <li><a href="gender02.html">02 | Data Preparation</a></li>
             
             
             
             
             
             
-            <li><a href="p1_landing_page.html">Product 1</a></li>
+            <li class="active"><a href="gender03.html">03 | K Nearest Neighbors</a></li>
             
             
             
             
             
             
-            <li><a href="p2_landing_page.html">Product 2</a></li>
+            <li><a href="gender04.html">04 | Random Forest</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="gender05.html">05 | Neural Network (Tensorflow)</a></li>
             
             
             
@@ -236,7 +245,7 @@
     <!-- Content Column -->
     <div class="col-md-9">
         <div class="post-header">
-   <h1 class="post-title-main"></h1>
+   <h1 class="post-title-main">Machine Learning Project</h1>
 </div>
 
 
@@ -246,56 +255,28 @@
    
 
     
-    
-<!-- this handles the automatic toc. use ## for subheads to auto-generate the on-page minitoc. if you use html tags, you must supply an ID for the heading element in order for it to appear in the minitoc. -->
-<script>
-$( document ).ready(function() {
-  // Handler for .ready() called.
-
-$('#toc').toc({ minimumHeaders: 0, listType: 'ul', showSpeed: 0, headers: 'h2,h3,h4' });
-
-/* this offset helps account for the space taken up by the floating toolbar. */
-$('#toc').on('click', 'a', function() {
-  var target = $(this.getAttribute('href'))
-    , scroll_target = target.offset().top
-
-  $(window).scrollTop(scroll_target - 10);
-  return false
-})
-  
-});
-</script>
-
-<div id="toc"></div>
-
-    
 
 <!--
     
 -->
 
-  <!-- new page -->
-<div id="navig">
-    <h1>Table of Contents</h1>
+  <html>
 
-    
+  <div class="divproject iframeproject">
+    <head>
+<script>
+  function resize(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 0 + 'px';
+  }
+</script>
+</head>
 
-
-
-
-
-
-
-
-
+<iframe src="pages/projects/gender03_content.html" onload="resize(this)" frameborder="0" scrolling="no" />
 
 
+  </div>
 
-    <ul id="mysidebar" class="nav">
-        
-    </ul>
-</div>
-
+  </html>
 
     <div class="tags">
         
