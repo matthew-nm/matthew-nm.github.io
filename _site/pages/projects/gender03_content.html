@@ -11888,7 +11888,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Determine-optimal-value">Determine optimal value<a class="anchor-link" href="#Determine-optimal-value">&#182;</a></h3><p>After evaluating many values of <em>k</em>, we can easily determine which value yields the best results. The plot below visualizes our process.</p>
+<h3 id="Find-optimal-value">Find optimal value<a class="anchor-link" href="#Find-optimal-value">&#182;</a></h3><p>After evaluating many values of <em>k</em>, we can easily determine which value yields the best results. The plot below visualizes our process.</p>
 
 </div>
 </div>
@@ -12293,7 +12293,7 @@ RK5CYII=
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Instantiate model with optimal k value</span>
 <span class="n">knn</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="n">kvals</span><span class="p">[</span><span class="n">kloc</span><span class="p">])</span>
 
-<span class="c1"># Fit model to test data</span>
+<span class="c1"># Fit model to training data</span>
 <span class="n">knn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">)</span>
 
 <span class="c1"># Create predictions from test data</span>
