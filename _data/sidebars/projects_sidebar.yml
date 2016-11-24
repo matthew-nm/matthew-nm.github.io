@@ -48,6 +48,6 @@ entries:
       url: /gender04.html
       output: web, pdf
 
-    - title: 05 | Neural Network (Tensorflow)
+    - title: 05 | Neural Network
       url: /gender05.html
       output: web, pdf

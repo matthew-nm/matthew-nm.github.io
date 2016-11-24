@@ -17,4 +17,4 @@ After taking a machine learning course offered by [Udemy](https://www.udemy.com/
 
 ![data_clustermap](../../images/gender_data_clustermap.png)
 
-Each of the ~3000 data samples has been processed by the **R** *seewave* and *tuneR* software packages, generating 20 acoustic parameters per sample. Each sample is labeled as either *male* or *female*, and therefore we can use various prediction models in an attempt to understand the differences between the two, and accurately predict the gender of future voices.
+Each of the ~3000 data samples has been processed by the **R** *seewave* and *tuneR* software packages, generating 20 acoustic parameters per sample. Each sample is labeled as either *male* or *female*, and therefore we can use various prediction models in an attempt to understand the differences between the two, and accurately predict the gender of future voice samples.
