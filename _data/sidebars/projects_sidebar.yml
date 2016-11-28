@@ -51,3 +51,27 @@ entries:
     - title: 05 | Neural Network
       url: /gender05.html
       output: web, pdf
+
+  - title: RSA Encryption
+    output: web, pdf
+    folderitems:
+
+    - title: 01 | Introduction to RSA
+      url: /rsa01.html
+      output: web, pdf
+
+    - title: 02 | Generate Encryption Keys
+      url: /rsa02.html
+      output: web, pdf
+
+    - title: 03 | Encrypt Message
+      url: /rsa03.html
+      output: web, pdf
+
+    - title: 04 | Decrypt Message
+      url: /rsa04.html
+      output: web, pdf
+
+    - title: 05 | Crack Encryption
+      url: /rsa05.html
+      output: web, pdf
