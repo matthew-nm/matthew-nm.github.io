@@ -75,3 +75,27 @@ entries:
     - title: 05 | Crack Encryption
       url: /rsa05.html
       output: web, pdf
+
+  # - title: Smartphone Garage Remote
+  #   output: web, pdf
+  #   folderitems:
+  #
+  #   - title: 01 |
+  #     url: /garage01.html
+  #     output: web, pdf
+  #
+  #   - title: 02 |
+  #     url: /garage02.html
+  #     output: web, pdf
+  #
+  #   - title: 03 |
+  #     url: /garage03.html
+  #     output: web, pdf
+  #
+  #   - title: 04 |
+  #     url: /garage04.html
+  #     output: web, pdf
+  #
+  #   - title: 05 |
+  #     url: /garage05.html
+  #     output: web, pdf
