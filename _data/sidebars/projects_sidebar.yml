@@ -28,6 +28,26 @@ entries:
 #      output: web, pdf
 #      type: homepage
 
+  - title: Smartphone Garage Remote
+    output: web, pdf
+    folderitems:
+
+    - title: 01 | Project Overview
+      url: /garage01.html
+      output: web, pdf
+
+    - title: 02 | Circuit Design
+      url: /garage02.html
+      output: web, pdf
+
+    - title: 03 | Raspberry Pi Setup
+      url: /garage03.html
+      output: web, pdf
+
+    - title: 04 | Smartphone Setup
+      url: /garage04.html
+      output: web, pdf
+
   - title: Gender Recognition by Voice
     output: web, pdf
     folderitems:
@@ -75,27 +95,3 @@ entries:
     - title: 05 | Crack Encryption
       url: /rsa05.html
       output: web, pdf
-
-  # - title: Smartphone Garage Remote
-  #   output: web, pdf
-  #   folderitems:
-  #
-  #   - title: 01 |
-  #     url: /garage01.html
-  #     output: web, pdf
-  #
-  #   - title: 02 |
-  #     url: /garage02.html
-  #     output: web, pdf
-  #
-  #   - title: 03 |
-  #     url: /garage03.html
-  #     output: web, pdf
-  #
-  #   - title: 04 |
-  #     url: /garage04.html
-  #     output: web, pdf
-  #
-  #   - title: 05 |
-  #     url: /garage05.html
-  #     output: web, pdf

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>04 Decrypt Message</title>
+<title>03 Raspberry Pi Setup</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -11751,172 +11751,118 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="RSA-Encryption-|-04-|-Decrypt-Message">RSA Encryption | 04 | Decrypt Message<a class="anchor-link" href="#RSA-Encryption-|-04-|-Decrypt-Message">&#182;</a></h1><p>Data decryption is achieved using the private key. Only the intended recipient will have the private key, insuring that even if the data is intercepted, it cannot be read.</p>
-<h3 id="Import-Libraries-and-Data">Import Libraries and Data<a class="anchor-link" href="#Import-Libraries-and-Data">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">obj</span>
-<span class="kn">from</span> <span class="nn">time</span> <span class="k">import</span> <span class="n">clock</span>
-</pre></div>
+<h1 id="Smartphone-Garage-Remote-|-03-|-Raspberry-Pi-Setup">Smartphone Garage Remote | 03 | Raspberry Pi Setup<a class="anchor-link" href="#Smartphone-Garage-Remote-|-03-|-Raspberry-Pi-Setup">&#182;</a></h1><h2 id="Connecting-to-the-Raspberry-Pi">Connecting to the Raspberry Pi<a class="anchor-link" href="#Connecting-to-the-Raspberry-Pi">&#182;</a></h2><p>One of the main benefits of using the Raspberry Pi is working with its Linux distro, Raspbian. Issuing commands to the OS can be done through a remote terminal. This can be accomplished from a working machine via SSH:</p>
+
+<pre><code>ssh pi@192.168.1.21</code></pre>
+<p>Additionally, Unix-based systems were designed to easily mount various filesystems into their own structure for easy access. This can be done with another fairly simple command from the working machine:</p>
+
+<pre><code>sshfs pi@192.168.1.21: /home/matthew/mount/pi</code></pre>
+<h2 id="WebIOPi">WebIOPi<a class="anchor-link" href="#WebIOPi">&#182;</a></h2><p>The crux of this project will be accomplished with the versitile <a href="http://webiopi.trouch.com/">WebIOPi</a>. WebIOPi is a web service that runs on the Raspberry Pi and allows control of the GPIO (general purpose input/output) pins on the Pi via HTTP or CoAP. Functionality can be implemented with Python.</p>
+<h3 id="WebIOPi-config">WebIOPi config<a class="anchor-link" href="#WebIOPi-config">&#182;</a></h3><p>There are two main aspects of WebIOPi that are used for this project. The first is the config file which will setup the HTTP service, link to the Python script, and configure the pins.</p>
+<h4 id="/etc/webiopi/config">/etc/webiopi/config<a class="anchor-link" href="#/etc/webiopi/config">&#182;</a></h4>
+<pre><code>[GPIO]
+# Initialize following GPIOs with given function and optional value
+# This is used during WebIOPi start process
+
+24 = OUT 0  
+
+#------------------------------------------------------------------------#
+
+[~GPIO]
+# Reset following GPIOs with given function and optional value
+# This is used at the end of WebIOPi stop process
+
+24 = OUT 0
+
+#------------------------------------------------------------------------#
+
+[SCRIPTS]
+# Load custom scripts
+
+default = /home/pi/webiopi/default.py
+
+#------------------------------------------------------------------------#
+
+[HTTP]
+# HTTP Server configuration
+
+enabled     = true
+port        = 8000
+passwd-file = /etc/webiopi/passwd
+prompt      = "WebIOPi"
+
+#------------------------------------------------------------------------#
+
+[COAP]
+# CoAP Server configuration
+
+enabled = false
+
+#------------------------------------------------------------------------#
+
+[DEVICES]
+
+#------------------------------------------------------------------------#
+
+[REST]
+
+#------------------------------------------------------------------------#
+
+[ROUTES]
+# Custom REST API routes
+
+/garage = /GPIO/24/value</code></pre>
+<p>First, during startup the config file will set our garage pin (24) to an output state with low voltage (off). At shutdown, the pin will be set to low voltage as well.</p>
+<p>Next, the script location is provided for the WebIOPi service. The details of this Python script will be detailed in the next section.</p>
+<p>The HTTP service is then started on our desired port, and with our chosen username and password, as generated with WebIOPi's password generator (run with superuser privileges):</p>
+
+<pre><code>sudo webiopi-passwd</code></pre>
+<p>We can also create a custom REST route to our garage pin. REST (aka Representational State Transfer) is the <em>way</em> in which HTTP should be used, and part of this methodology is aided with the use of human-readable routes. But as shown below, the Python macro will take care of our access, eliminating the need for this shortcut. Direct access via the REST route was only useful during testing.</p>
+<h3 id="Python-script-and-macro">Python script and macro<a class="anchor-link" href="#Python-script-and-macro">&#182;</a></h3><p>The Python scripts used by WebIOPi are Arduino-like in that they can contain <em>setup</em>, <em>loop</em>, and <em>destroy</em> functions that will be run at startup, throughout, and at the end of the system, respectably. But uniquely, macros can be defined as well. Macros are definitions that can be made within the script and then accessed via a particular REST route.</p>
+<h4 id="/home/pi/webiopi/default.py">/home/pi/webiopi/default.py<a class="anchor-link" href="#/home/pi/webiopi/default.py">&#182;</a></h4>
+<pre><code>import webiopi
+import time
+gpio = webiopi.GPIO
+sleep = time.sleep
+
+garage_pin  = 24   # set garage pin
+garage_wait = 0.3  # wait time (s)
+
+"""
+Arduino-Like script functions
+"""
+# "setup" function called at WebIOPi startup
+def setup():
+    return
+
+# "loop" function run repeatedly by WebIOPi
+def loop():
+    return
+
+# "destroy" function called at WebIOPi shutdown
+def destroy():
+    return
+
+"""
+Macros
+"""
+@webiopi.macro
+def garage():
+    gpio.digitalWrite(garage_pin, 1)
+    sleep(garage_wait)
+    gpio.digitalWrite(garage_pin, 0)
+    return</code></pre>
+<p>In our case, putting our garage logic inside the loop is not ideal. By defining a macro, we can operate our garage remote at any time with a direct POST command. Our macro is fairly simple; the remote is switched on, and after a short amount of time, it is switched off. The macro can be accessed via the REST route,</p>
+
+<pre><code>/macros/garage</code></pre>
+<h2 id="Port-Forwarding">Port Forwarding<a class="anchor-link" href="#Port-Forwarding">&#182;</a></h2><p>Within our network, the Raspberry Pi's WebIOPi service can be access through port 8000 and its local IP address. For instance, we can activate our garage macro via,</p>
+
+<pre><code>POST username:password@192.168.1.21:8000/macros/garage</code></pre>
+<p>However, it is not always convenient to be on our local network to activate our remote. From outside the house, obtaining a wireless connection can require waiting by the garage door for nearly 30 seconds. To fix this issue, we can fallback to the cellular data network, accessing our Raspberry Pi from outside the local network.</p>
+<p>To do this, we replace the local IP address of our Pi with the IP address of our house (as can be found from websites such as <a href="http://canihazip.com">this</a>).  Next, we need to tell our home router to forward incoming traffic on port 8000 to the Pi. The exact method depends on the router software, but most routers allow port forwarding.</p>
 
 </div>
 </div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Recieve-message">Recieve message<a class="anchor-link" href="#Recieve-message">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Received encrypted message</span>
-<span class="n">message_encrypted</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;data/message_encrypted&#39;</span><span class="p">)</span>
-
-<span class="c1"># All keys are known</span>
-<span class="n">keys</span>        <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;data/keys&#39;</span><span class="p">)</span>
-<span class="n">exponent</span>    <span class="o">=</span> <span class="n">keys</span><span class="p">[</span><span class="s1">&#39;exponent&#39;</span><span class="p">]</span>
-<span class="n">key_public</span>  <span class="o">=</span> <span class="n">keys</span><span class="p">[</span><span class="s1">&#39;key_public&#39;</span><span class="p">]</span>
-<span class="n">key_private</span> <span class="o">=</span> <span class="n">keys</span><span class="p">[</span><span class="s1">&#39;key_private&#39;</span><span class="p">]</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Define-decryption-algorithm">Define decryption algorithm<a class="anchor-link" href="#Define-decryption-algorithm">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">message_encrypted</span><span class="p">,</span> <span class="n">key_private</span><span class="p">,</span> <span class="n">key_public</span><span class="p">):</span>
-    
-    <span class="c1"># Decrypt message</span>
-    <span class="n">message_ascii</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">message_encrypted</span><span class="p">:</span>
-        <span class="n">message_ascii</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="o">**</span><span class="n">key_private</span><span class="p">)</span> <span class="o">%</span> <span class="n">key_public</span><span class="p">)</span>
-    
-    <span class="c1"># Convert message to string</span>
-    <span class="n">message</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">message_ascii</span><span class="p">:</span>
-        <span class="n">message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-    
-    <span class="c1"># Return decrypted message</span>
-    <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Decrypt-message">Decrypt message<a class="anchor-link" href="#Decrypt-message">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">begin</span> <span class="o">=</span> <span class="n">clock</span><span class="p">()</span>
-<span class="n">message_decrypted</span> <span class="o">=</span> <span class="n">decrypt</span><span class="p">(</span><span class="n">message_encrypted</span><span class="p">,</span> <span class="n">key_private</span><span class="p">,</span> <span class="n">key_public</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Message decrypted in </span><span class="si">{:.6}</span><span class="s1"> seconds.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">clock</span><span class="p">()</span><span class="o">-</span><span class="n">begin</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">message_decrypted</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Message decrypted in 9.8887 seconds.
-
-
-Don&#39;t tell my secrets to anyone, please!
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Inspect-decryption-process">Inspect decryption process<a class="anchor-link" href="#Inspect-decryption-process">&#182;</a></h3><p>The math involved with decrypting the message is very taxing. Even with our small message, it took approx. 10 seconds to finish the decryption process. If the prime factors used to generate the algorithm are known, advanced algorithms can be used to more quickly decrypt the message, but it will still be much longer than the encryption process.</p>
-<p>As mentioned before, our keys are much smaller than some modern crypto keys. Even still, the values being managed are quite large. Below is an example of an intermediate calculation on our first encrypted charcter.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">big_number</span> <span class="o">=</span> <span class="n">message_encrypted</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="n">key_private</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This number is </span><span class="si">{:,}</span><span class="s1"> digits long!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">big_number</span><span class="p">))))</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>This number is 927,453 digits long!
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
     </div>
   </div>

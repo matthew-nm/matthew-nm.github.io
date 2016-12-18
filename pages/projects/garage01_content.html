@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>04 Decrypt Message</title>
+<title>01 Project Overview</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -11751,172 +11751,20 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="RSA-Encryption-|-04-|-Decrypt-Message">RSA Encryption | 04 | Decrypt Message<a class="anchor-link" href="#RSA-Encryption-|-04-|-Decrypt-Message">&#182;</a></h1><p>Data decryption is achieved using the private key. Only the intended recipient will have the private key, insuring that even if the data is intercepted, it cannot be read.</p>
-<h3 id="Import-Libraries-and-Data">Import Libraries and Data<a class="anchor-link" href="#Import-Libraries-and-Data">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">obj</span>
-<span class="kn">from</span> <span class="nn">time</span> <span class="k">import</span> <span class="n">clock</span>
-</pre></div>
+<h1 id="Smartphone-Garage-Remote-|-01-|-Project-Overview">Smartphone Garage Remote | 01 | Project Overview<a class="anchor-link" href="#Smartphone-Garage-Remote-|-01-|-Project-Overview">&#182;</a></h1><h2 id="Purpose">Purpose<a class="anchor-link" href="#Purpose">&#182;</a></h2><p>I love microcontrollers and wanted to find a good excuse to play with one! This project was born from a particular annoyance I encountered on a daily basis, for which I then decided to create a solution.</p>
+<p>My current living situation does not provide space for parking my car in the garage, and so I must find parking on the street nearby. My walk up to the house then takes me to the garage door (on the backside of the house), but without my garage remote on hand, I have no way of getting in. I must take a longer route around to the front door. Conversely, I cannot leave out the garage door on foot since I have no way of closing the door behind me, unless I close the door while inside and run under it like Indiana Jones.</p>
+<p>Wouldn't it be great if I could control the garage door with something I always have on hand, such as my smartphone?!</p>
+<p><img src="img/smartphone_buttons.png" alt="Final Product"></p>
+<html><center><i>Sneak peak at the final product! <br/> Android allows users to create their own Quick Settings buttons within the notification shade.</i></center></html><h2 id="Functionality-Chain">Functionality Chain<a class="anchor-link" href="#Functionality-Chain">&#182;</a></h2><p>With our purpose established, we can now look at how the intended functionality will be accomplished and what hardware will be needed.</p>
+<p>The chain begins with my smartphone, which happens to be a Nexus 5 running Android 6.0.1. The specifics of setting up my phone will be discussed with greater detail in notebook 04, but the end product will be a <em>POST</em> command via the Hypertext Transfer Protocol (HTTP).</p>
+<p><img src="img/functionality_chain.png" alt="Functionality Chain"></p>
+<p>The next piece of hardware is the network that will connect my smartphone command to the rest of my system. If I am within range of my local wireless home network, the home router will take care of the networking task. If I am out of range of the local network, the signal can travel through the world-wide-web before reaching my home router.</p>
+<p>The signal will then be sent to the microcontroller, which will be physically connected to a garage door remote. The remote will be cycled on and off, thus triggering the garage door to open. The remote signal is capable of penetrating through multiple walls, making it possible to place the microcontroller and remote anywhere within the house without disrupting its functionality.</p>
+<h2 id="Choosing-the-Raspberry-Pi-3-Microcontroller">Choosing the Raspberry Pi 3 Microcontroller<a class="anchor-link" href="#Choosing-the-Raspberry-Pi-3-Microcontroller">&#182;</a></h2><p>There are many microcontrollers available for hobbyists to choose from, but the use of the Raspberry Pi 3 was a somewhat easy choice to make. The Pi 3 is less of a microcontroller and more of an entire Linux computer in a small  package. This includes built-in WiFi connectivity and a full Linux distribution, <em>Raspbian</em>.</p>
+<p>Given my comfort with Linux, I knew I could jump right in with this controller and get working. Furthermore, Linux (and other Unix-based systems like macOS) can easily worth together through the use of remote terminal shells (SSH) and the remote mounting of filesystems (SSHFS). Together, these make working with the Pi via another Linux machine very quick and easy.</p>
 
 </div>
 </div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Recieve-message">Recieve message<a class="anchor-link" href="#Recieve-message">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Received encrypted message</span>
-<span class="n">message_encrypted</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;data/message_encrypted&#39;</span><span class="p">)</span>
-
-<span class="c1"># All keys are known</span>
-<span class="n">keys</span>        <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;data/keys&#39;</span><span class="p">)</span>
-<span class="n">exponent</span>    <span class="o">=</span> <span class="n">keys</span><span class="p">[</span><span class="s1">&#39;exponent&#39;</span><span class="p">]</span>
-<span class="n">key_public</span>  <span class="o">=</span> <span class="n">keys</span><span class="p">[</span><span class="s1">&#39;key_public&#39;</span><span class="p">]</span>
-<span class="n">key_private</span> <span class="o">=</span> <span class="n">keys</span><span class="p">[</span><span class="s1">&#39;key_private&#39;</span><span class="p">]</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Define-decryption-algorithm">Define decryption algorithm<a class="anchor-link" href="#Define-decryption-algorithm">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">message_encrypted</span><span class="p">,</span> <span class="n">key_private</span><span class="p">,</span> <span class="n">key_public</span><span class="p">):</span>
-    
-    <span class="c1"># Decrypt message</span>
-    <span class="n">message_ascii</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">message_encrypted</span><span class="p">:</span>
-        <span class="n">message_ascii</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="o">**</span><span class="n">key_private</span><span class="p">)</span> <span class="o">%</span> <span class="n">key_public</span><span class="p">)</span>
-    
-    <span class="c1"># Convert message to string</span>
-    <span class="n">message</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">message_ascii</span><span class="p">:</span>
-        <span class="n">message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-    
-    <span class="c1"># Return decrypted message</span>
-    <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Decrypt-message">Decrypt message<a class="anchor-link" href="#Decrypt-message">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">begin</span> <span class="o">=</span> <span class="n">clock</span><span class="p">()</span>
-<span class="n">message_decrypted</span> <span class="o">=</span> <span class="n">decrypt</span><span class="p">(</span><span class="n">message_encrypted</span><span class="p">,</span> <span class="n">key_private</span><span class="p">,</span> <span class="n">key_public</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Message decrypted in </span><span class="si">{:.6}</span><span class="s1"> seconds.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">clock</span><span class="p">()</span><span class="o">-</span><span class="n">begin</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">message_decrypted</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Message decrypted in 9.8887 seconds.
-
-
-Don&#39;t tell my secrets to anyone, please!
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Inspect-decryption-process">Inspect decryption process<a class="anchor-link" href="#Inspect-decryption-process">&#182;</a></h3><p>The math involved with decrypting the message is very taxing. Even with our small message, it took approx. 10 seconds to finish the decryption process. If the prime factors used to generate the algorithm are known, advanced algorithms can be used to more quickly decrypt the message, but it will still be much longer than the encryption process.</p>
-<p>As mentioned before, our keys are much smaller than some modern crypto keys. Even still, the values being managed are quite large. Below is an example of an intermediate calculation on our first encrypted charcter.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">big_number</span> <span class="o">=</span> <span class="n">message_encrypted</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="n">key_private</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;This number is </span><span class="si">{:,}</span><span class="s1"> digits long!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">big_number</span><span class="p">))))</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>This number is 927,453 digits long!
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
     </div>
   </div>

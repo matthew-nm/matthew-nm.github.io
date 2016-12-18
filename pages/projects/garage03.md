@@ -1,6 +1,6 @@
 ---
 title: Smartphone Garage Remote
-header: Cryptography Project
+header: Microcontroller Project
 sidebar: projects_sidebar
 toc: false
 permalink: garage03.html

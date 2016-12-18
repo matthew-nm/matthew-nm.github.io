@@ -3,7 +3,7 @@ title: Smartphone Garage Remote
 header: Microcontroller Project
 sidebar: projects_sidebar
 toc: false
-permalink: garage02.html
+permalink: garage04.html
 layout: projects
 folder: projects
 ---
@@ -15,7 +15,7 @@ folder: projects
 </script>
 </head>
 
-<iframe src="pages/projects/garage02_content.html"
+<iframe src="pages/projects/garage04_content.html"
         onload="resize(this)"
         frameborder="0"
         scrolling="no"/>
